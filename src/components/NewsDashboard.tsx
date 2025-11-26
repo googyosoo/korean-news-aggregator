@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { NewsItem } from '@/lib/rss';
 import NewsCard from './NewsCard';
-import { RefreshCw, Newspaper } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 
 interface NewsData {
     joongang: NewsItem[];
@@ -57,13 +57,18 @@ const NewsDashboard: React.FC = () => {
     const renderContent = () => {
         if (filter === 'all') {
             return (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Korea JoongAng Daily Column */}
-                    <section>
-                        <h2 className="text-lg font-bold mb-4 text-blue-600 uppercase tracking-wider border-b-2 border-blue-100 pb-2">
-                            Korea JoongAng Daily
-                        </h2>
-                        <div className="space-y-3">
+                    <section className="flex flex-col gap-4">
+                        <div className="flex items-center justify-between border-b border-blue-100 pb-2 mb-2">
+                            <h2 className="text-lg font-bold text-blue-800 font-serif">
+                                Korea JoongAng Daily
+                            </h2>
+                            <span className="text-xs font-medium text-blue-400 bg-blue-50 px-2 py-1 rounded-full">
+                                {news?.joongang.length || 0} Articles
+                            </span>
+                        </div>
+                        <div className="space-y-4">
                             {news?.joongang.map((item, index) => (
                                 <NewsCard key={`joongang-${index}`} item={item} />
                             ))}
@@ -71,11 +76,16 @@ const NewsDashboard: React.FC = () => {
                     </section>
 
                     {/* Korea Times Column */}
-                    <section>
-                        <h2 className="text-lg font-bold mb-4 text-red-600 uppercase tracking-wider border-b-2 border-red-100 pb-2">
-                            Korea Times
-                        </h2>
-                        <div className="space-y-3">
+                    <section className="flex flex-col gap-4">
+                        <div className="flex items-center justify-between border-b border-red-100 pb-2 mb-2">
+                            <h2 className="text-lg font-bold text-red-800 font-serif">
+                                Korea Times
+                            </h2>
+                            <span className="text-xs font-medium text-red-400 bg-red-50 px-2 py-1 rounded-full">
+                                {news?.times.length || 0} Articles
+                            </span>
+                        </div>
+                        <div className="space-y-4">
                             {news?.times.map((item, index) => (
                                 <NewsCard key={`times-${index}`} item={item} />
                             ))}
@@ -83,11 +93,16 @@ const NewsDashboard: React.FC = () => {
                     </section>
 
                     {/* Korea Herald Column */}
-                    <section>
-                        <h2 className="text-lg font-bold mb-4 text-green-600 uppercase tracking-wider border-b-2 border-green-100 pb-2">
-                            Korea Herald
-                        </h2>
-                        <div className="space-y-3">
+                    <section className="flex flex-col gap-4">
+                        <div className="flex items-center justify-between border-b border-green-100 pb-2 mb-2">
+                            <h2 className="text-lg font-bold text-green-800 font-serif">
+                                Korea Herald
+                            </h2>
+                            <span className="text-xs font-medium text-green-400 bg-green-50 px-2 py-1 rounded-full">
+                                {news?.herald.length || 0} Articles
+                            </span>
+                        </div>
+                        <div className="space-y-4">
                             {news?.herald.map((item, index) => (
                                 <NewsCard key={`herald-${index}`} item={item} />
                             ))}
@@ -100,7 +115,7 @@ const NewsDashboard: React.FC = () => {
         // Filtered View
         const filteredItems = getFilteredNews();
         return (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredItems.map((item, index) => (
                     <NewsCard key={`${filter}-${index}`} item={item} />
                 ))}
@@ -110,94 +125,63 @@ const NewsDashboard: React.FC = () => {
 
     if (loading && !news) {
         return (
-            <div className="flex justify-center items-center min-h-screen text-zinc-500">
-                <div className="animate-spin mr-2">
-                    <RefreshCw />
+            <div className="flex flex-col justify-center items-center min-h-[60vh] text-slate-400">
+                <div className="animate-spin mb-4">
+                    <RefreshCw className="w-8 h-8" />
                 </div>
-                Loading latest news...
+                <p className="text-sm font-medium tracking-wide uppercase">Curating latest headlines...</p>
             </div>
         );
     }
 
     if (error && !news) {
         return (
-            <div className="flex flex-col justify-center items-center min-h-screen text-red-500">
-                <p className="mb-4">{error}</p>
+            <div className="flex flex-col justify-center items-center min-h-[60vh] text-slate-500">
+                <p className="mb-6 text-lg">{error}</p>
                 <button
                     onClick={() => fetchNews()}
-                    className="px-4 py-2 bg-zinc-800 rounded hover:bg-zinc-700 text-white transition-colors"
+                    className="px-6 py-2.5 bg-slate-900 rounded-lg hover:bg-slate-800 text-white transition-all shadow-lg hover:shadow-xl font-medium"
                 >
-                    Retry
+                    Retry Connection
                 </button>
             </div>
         );
     }
 
     return (
-        <div className="container mx-auto px-4 py-8 max-w-7xl">
-            <header className="flex flex-col md:flex-row justify-between items-center mb-10 border-b border-zinc-200 pb-6">
-                <div className="flex items-center mb-4 md:mb-0">
-                    <Newspaper className="w-8 h-8 mr-3 text-zinc-800" />
-                    <h1 className="text-3xl font-extrabold text-zinc-900 tracking-tight">
-                        KOREA NEWS <span className="text-zinc-400 font-light">AGGREGATOR</span>
-                    </h1>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                    <button
-                        onClick={() => setFilter('all')}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${filter === 'all'
-                            ? 'bg-zinc-900 text-white shadow-md'
-                            : 'bg-white text-zinc-600 hover:bg-zinc-100 border border-zinc-200'
-                            }`}
-                    >
-                        All News
-                    </button>
-                    <button
-                        onClick={() => setFilter('joongang')}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${filter === 'joongang'
-                            ? 'bg-blue-600 text-white shadow-md'
-                            : 'bg-white text-zinc-600 hover:bg-blue-50 hover:text-blue-600 border border-zinc-200'
-                            }`}
-                    >
-                        JoongAng
-                    </button>
-                    <button
-                        onClick={() => setFilter('times')}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${filter === 'times'
-                            ? 'bg-red-600 text-white shadow-md'
-                            : 'bg-white text-zinc-600 hover:bg-red-50 hover:text-red-600 border border-zinc-200'
-                            }`}
-                    >
-                        Times
-                    </button>
-                    <button
-                        onClick={() => setFilter('herald')}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${filter === 'herald'
-                            ? 'bg-green-600 text-white shadow-md'
-                            : 'bg-white text-zinc-600 hover:bg-green-50 hover:text-green-600 border border-zinc-200'
-                            }`}
-                    >
-                        Herald
-                    </button>
-
-                    <div className="w-px h-6 bg-zinc-300 mx-2 hidden md:block"></div>
+        <div className="container mx-auto px-4 max-w-7xl">
+            <div className="sticky top-20 z-40 py-4 bg-slate-50/95 backdrop-blur-sm mb-6 border-b border-slate-200/50">
+                <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div className="flex items-center p-1 bg-white rounded-full border border-slate-200 shadow-sm">
+                        {(['all', 'joongang', 'times', 'herald'] as FilterType[]).map((f) => (
+                            <button
+                                key={f}
+                                onClick={() => setFilter(f)}
+                                className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 ${filter === f
+                                        ? 'bg-slate-900 text-white shadow-md'
+                                        : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
+                                    }`}
+                            >
+                                {f === 'all' ? 'All Sources' : f === 'joongang' ? 'JoongAng' : f === 'times' ? 'Times' : 'Herald'}
+                            </button>
+                        ))}
+                    </div>
 
                     <button
                         onClick={handleRefresh}
                         disabled={refreshing}
-                        className={`flex items-center px-4 py-2 bg-white border border-zinc-200 rounded-full hover:bg-zinc-50 text-zinc-700 transition-all ${refreshing ? 'opacity-50 cursor-not-allowed' : ''
+                        className={`flex items-center px-4 py-2 bg-white border border-slate-200 rounded-full hover:bg-slate-50 text-slate-600 transition-all text-sm font-medium shadow-sm hover:shadow ${refreshing ? 'opacity-70 cursor-not-allowed' : ''
                             }`}
                     >
                         <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
-                        {refreshing ? 'Updating' : 'Refresh'}
+                        {refreshing ? 'Syncing...' : 'Refresh Feed'}
                     </button>
                 </div>
-            </header>
+            </div>
 
-            <main>
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                 {renderContent()}
-            </main>
+            </div>
         </div>
     );
 };

@@ -3,41 +3,70 @@
 @tailwind utilities;
 
 :root {
-  --background: #f4f4f5;
-  /* zinc-100 */
-  --foreground: #18181b;
-  /* zinc-900 */
+  /* Premium Newspaper Palette */
+  --background: #f8f9fa;
+  /* Slate-50 */
+  --foreground: #1a1a1a;
+  /* Gray-900 */
+
   --card-bg: #ffffff;
-  --card-border: #e4e4e7;
-  /* zinc-200 */
+  --card-border: #e2e8f0;
+  /* Slate-200 */
+
+  --primary: #1a1a1a;
+  --accent: #2563eb;
+  /* Blue-600 */
+
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Inter', sans-serif;
 }
+
+/* Import Fonts via CSS for simplicity if not using Next.js Font optimization yet */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;600;700&display=swap');
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-serif);
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+
+  .glass-header {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
 }
 
-/* Custom Scrollbar for Webkit */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f4f4f5;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d4d4d8;
-  border-radius: 4px;
+  background: #cbd5e1;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a1a1aa;
+  background: #94a3b8;
 }
