@@ -27,7 +27,7 @@ export default function RootLayout({
           {children}
         </main>
         <footer className="py-8 text-center text-slate-400 text-sm border-t border-slate-200 mt-auto">
-          <p>© {new Date().getFullYear()} Korea News Aggregator. All rights reserved.</p>
+          <p>2025 Korea News Aggregator. Copyright © Jinwoo Hong. All rights reserved.</p>
         </footer>
       </body>
     </html>
