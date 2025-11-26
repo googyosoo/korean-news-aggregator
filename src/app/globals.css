@@ -1,28 +1,30 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
-  /* Premium Newspaper Palette */
-  --background: #f8f9fa;
-  /* Slate-50 */
-  --foreground: #1a1a1a;
-  /* Gray-900 */
-
-  --card-bg: #ffffff;
-  --card-border: #e2e8f0;
-  /* Slate-200 */
-
-  --primary: #1a1a1a;
-  --accent: #2563eb;
-  /* Blue-600 */
-
+@theme {
   --font-serif: 'Playfair Display', serif;
   --font-sans: 'Inter', sans-serif;
+
+  --color-background: #f8f9fa;
+  --color-foreground: #1a1a1a;
+
+  --color-card-bg: #ffffff;
+  --color-card-border: #e2e8f0;
+
+  --color-primary: #1a1a1a;
+  --color-accent: #2563eb;
 }
 
-/* Import Fonts via CSS for simplicity if not using Next.js Font optimization yet */
+/* Import Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;600;700&display=swap');
+
+:root {
+  --background: var(--color-background);
+  --foreground: var(--color-foreground);
+  --card-bg: var(--color-card-bg);
+  --card-border: var(--color-card-border);
+  --primary: var(--color-primary);
+  --accent: var(--color-accent);
+}
 
 body {
   color: var(--foreground);
@@ -41,16 +43,14 @@ h6 {
   font-family: var(--font-serif);
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+@utility text-balance {
+  text-wrap: balance;
+}
 
-  .glass-header {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  }
+@utility glass-header {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 /* Custom Scrollbar */

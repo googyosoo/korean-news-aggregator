@@ -55,69 +55,29 @@ const NewsDashboard: React.FC = () => {
     };
 
     const renderContent = () => {
+        let itemsToDisplay: NewsItem[] = [];
+
         if (filter === 'all') {
-            return (
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Korea JoongAng Daily Column */}
-                    <section className="flex flex-col gap-4">
-                        <div className="flex items-center justify-between border-b border-blue-100 pb-2 mb-2">
-                            <h2 className="text-lg font-bold text-blue-800 font-serif">
-                                Korea JoongAng Daily
-                            </h2>
-                            <span className="text-xs font-medium text-blue-400 bg-blue-50 px-2 py-1 rounded-full">
-                                {news?.joongang.length || 0} Articles
-                            </span>
-                        </div>
-                        <div className="space-y-4">
-                            {news?.joongang.map((item, index) => (
-                                <NewsCard key={`joongang-${index}`} item={item} />
-                            ))}
-                        </div>
-                    </section>
-
-                    {/* Korea Times Column */}
-                    <section className="flex flex-col gap-4">
-                        <div className="flex items-center justify-between border-b border-red-100 pb-2 mb-2">
-                            <h2 className="text-lg font-bold text-red-800 font-serif">
-                                Korea Times
-                            </h2>
-                            <span className="text-xs font-medium text-red-400 bg-red-50 px-2 py-1 rounded-full">
-                                {news?.times.length || 0} Articles
-                            </span>
-                        </div>
-                        <div className="space-y-4">
-                            {news?.times.map((item, index) => (
-                                <NewsCard key={`times-${index}`} item={item} />
-                            ))}
-                        </div>
-                    </section>
-
-                    {/* Korea Herald Column */}
-                    <section className="flex flex-col gap-4">
-                        <div className="flex items-center justify-between border-b border-green-100 pb-2 mb-2">
-                            <h2 className="text-lg font-bold text-green-800 font-serif">
-                                Korea Herald
-                            </h2>
-                            <span className="text-xs font-medium text-green-400 bg-green-50 px-2 py-1 rounded-full">
-                                {news?.herald.length || 0} Articles
-                            </span>
-                        </div>
-                        <div className="space-y-4">
-                            {news?.herald.map((item, index) => (
-                                <NewsCard key={`herald-${index}`} item={item} />
-                            ))}
-                        </div>
-                    </section>
-                </div>
-            );
+            // Combine all items
+            if (news) {
+                itemsToDisplay = [
+                    ...news.joongang,
+                    ...news.times,
+                    ...news.herald
+                ];
+                // Sort by date (newest first)
+                itemsToDisplay.sort((a, b) => {
+                    return new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime();
+                });
+            }
+        } else {
+            itemsToDisplay = getFilteredNews();
         }
 
-        // Filtered View
-        const filteredItems = getFilteredNews();
         return (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredItems.map((item, index) => (
-                    <NewsCard key={`${filter}-${index}`} item={item} />
+                {itemsToDisplay.map((item, index) => (
+                    <NewsCard key={`${filter}-${index}-${item.title}`} item={item} />
                 ))}
             </div>
         );
@@ -158,8 +118,8 @@ const NewsDashboard: React.FC = () => {
                                 key={f}
                                 onClick={() => setFilter(f)}
                                 className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 ${filter === f
-                                        ? 'bg-slate-900 text-white shadow-md'
-                                        : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
+                                    ? 'bg-slate-900 text-white shadow-md'
+                                    : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
                                     }`}
                             >
                                 {f === 'all' ? 'All Sources' : f === 'joongang' ? 'JoongAng' : f === 'times' ? 'Times' : 'Herald'}
